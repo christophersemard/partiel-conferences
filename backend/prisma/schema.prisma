@@ -11,6 +11,8 @@ datasource db {
 
 model User {
   id           Int              @id @default(autoincrement())
+  firstName    String           @default("")
+  lastName     String           @default("")
   email        String           @unique
   passwordHash String
   role         Role             @default(VISITOR)
@@ -22,12 +24,14 @@ model User {
 model Room {
   id          Int          @id @default(autoincrement())
   name        String
+  capacity    Int          @default(0)
   conferences Conference[]
 }
 
 model Speaker {
   id           Int        @id @default(autoincrement())
-  fullName     String
+  firstName    String     @default("")
+  lastName     String     @default("")
   photoUrl     String?
   bio          String?
   conferenceId Int        @unique

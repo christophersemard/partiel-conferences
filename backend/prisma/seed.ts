@@ -26,9 +26,9 @@ async function main() {
     // ROOMS
     await prisma.room.createMany({
         data: [
-            { name: "Salle Alpha" },
-            { name: "Salle Beta" },
-            { name: "Salle Gamma" },
+            { name: "Salle Alpha", capacity: 10 },
+            { name: "Salle Beta", capacity: 10 },
+            { name: "Salle Gamma", capacity: 10 },
         ],
     });
 
@@ -38,6 +38,8 @@ async function main() {
     const [admin, sponsor, visitor1, visitor2] = await Promise.all([
         prisma.user.create({
             data: {
+                firstName: "Admin",
+                lastName: "User",
                 email: "admin@example.com",
                 passwordHash:
                     "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
@@ -46,6 +48,8 @@ async function main() {
         }),
         prisma.user.create({
             data: {
+                firstName: "Sponsor",
+                lastName: "User",
                 email: "sponsor@example.com",
                 passwordHash:
                     "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
@@ -54,6 +58,8 @@ async function main() {
         }),
         prisma.user.create({
             data: {
+                firstName: "John",
+                lastName: "Doe",
                 email: "john@doe.com",
                 passwordHash:
                     "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
@@ -62,6 +68,8 @@ async function main() {
         }),
         prisma.user.create({
             data: {
+                firstName: "Jane",
+                lastName: "Doe",
                 email: "jane@doe.com",
                 passwordHash:
                     "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
@@ -89,7 +97,7 @@ async function main() {
             description: "Bonnes pratiques pour protéger ses infrastructures",
             date: new Date("2025-09-25"),
             startTime: new Date("2025-09-25T14:00:00"),
-            endTime: new Date("2025-09-25T15:00:00"),
+            endTime: new Date("2025-09-25T17:00:00"),
             roomId: rooms[1].id,
         },
     });
@@ -130,7 +138,8 @@ async function main() {
     await Promise.all([
         prisma.speaker.create({
             data: {
-                fullName: "Alice Dupont",
+                firstName: "Alice",
+                lastName: "Dupont",
                 photoUrl: "https://via.placeholder.com/150",
                 bio:
                     "Experte en transformation digitale et conférencière TEDx.",
@@ -139,7 +148,8 @@ async function main() {
         }),
         prisma.speaker.create({
             data: {
-                fullName: "Mohamed Ben Salah",
+                firstName: "Bob",
+                lastName: "Martin",
                 photoUrl: "https://via.placeholder.com/150",
                 bio: "Consultant en cybersécurité depuis 10 ans.",
                 conferenceId: conf2.id,
@@ -147,7 +157,8 @@ async function main() {
         }),
         prisma.speaker.create({
             data: {
-                fullName: "Claire Durant",
+                firstName: "Claire",
+                lastName: "Durant",
                 photoUrl: "https://via.placeholder.com/150",
                 bio: "Coach en leadership et ancienne DRH chez Capgemini.",
                 conferenceId: conf3.id,
@@ -155,7 +166,8 @@ async function main() {
         }),
         prisma.speaker.create({
             data: {
-                fullName: "Alice Dupont",
+                firstName: "David",
+                lastName: "Lefebvre",
                 photoUrl: "https://via.placeholder.com/150",
                 bio: "Experte en IA dans les PME.",
                 conferenceId: conf4.id,
@@ -163,7 +175,8 @@ async function main() {
         }),
         prisma.speaker.create({
             data: {
-                fullName: "Claire Durant",
+                firstName: "Eva",
+                lastName: "Moreau",
                 photoUrl: "https://via.placeholder.com/150",
                 bio: "Experte RH et recrutement innovant.",
                 conferenceId: conf5.id,

@@ -13,8 +13,36 @@ import { User } from "@prisma/client";
 export class ConferenceService {
     constructor(private prisma: PrismaService) {}
 
-    async findAll() {
+    async findAll(filters: {
+        date?: string;
+        roomId?: number;
+        speakerName?: string;
+    }) {
+        const { date, roomId, speakerName } = filters;
+
         return this.prisma.conference.findMany({
+            where: {
+                date: date ? new Date(date) : undefined,
+                roomId: roomId || undefined,
+                speaker: speakerName
+                    ? {
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: speakerName,
+                                      mode: "insensitive",
+                                  },
+                              },
+                              {
+                                  lastName: {
+                                      contains: speakerName,
+                                      mode: "insensitive",
+                                  },
+                              },
+                          ],
+                      }
+                    : undefined,
+            },
             include: {
                 room: true,
                 speaker: true,
@@ -53,11 +81,15 @@ export class ConferenceService {
             where: {
                 roomId,
                 date,
-                NOT: {
-                    endTime: { lte: startTime },
-                },
-                startTime: { lt: endTime },
-                ...(excludeId ? { id: { not: excludeId } } : {}),
+                id: excludeId ? { not: excludeId } : undefined,
+                AND: [
+                    {
+                        startTime: { lt: endTime },
+                    },
+                    {
+                        endTime: { gt: startTime },
+                    },
+                ],
             },
         });
 
@@ -98,15 +130,45 @@ export class ConferenceService {
     async update(id: number, dto: UpdateConferenceDto, user: User) {
         const existing = await this.prisma.conference.findUnique({
             where: { id },
+            include: { speaker: true },
         });
+
         if (!existing) throw new NotFoundException("Conférence introuvable");
 
-        if (user.role === "SPONSOR" && existing.sponsorId !== user.id) {
+        const isSponsor = user.role === "SPONSOR";
+        const isOwner = existing.sponsorId === user.id;
+
+        if (isSponsor && !isOwner) {
             throw new ForbiddenException(
                 "Vous ne pouvez modifier que vos conférences."
             );
         }
 
+        // SPONSOR : édition limitée
+        if (isSponsor) {
+            const updateData: Pick<
+                UpdateConferenceDto,
+                "title" | "description"
+            > = {};
+            if (dto.title) updateData.title = dto.title;
+            if (dto.description) updateData.description = dto.description;
+
+            await this.prisma.conference.update({
+                where: { id },
+                data: updateData,
+            });
+
+            if (dto.speaker && existing.speaker?.id) {
+                await this.prisma.speaker.update({
+                    where: { id: existing.speaker.id },
+                    data: dto.speaker,
+                });
+            }
+
+            return this.findOne(id);
+        }
+
+        // ADMIN : édition complète
         const date = dto.date ? new Date(dto.date) : existing.date;
         const startTime = dto.startTime
             ? new Date(dto.startTime)
@@ -133,9 +195,9 @@ export class ConferenceService {
             },
         });
 
-        if (dto.speaker) {
-            await this.prisma.speaker.updateMany({
-                where: { conferenceId: id },
+        if (dto.speaker && existing.speaker?.id) {
+            await this.prisma.speaker.update({
+                where: { id: existing.speaker.id },
                 data: dto.speaker,
             });
         }

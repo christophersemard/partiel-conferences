@@ -8,7 +8,7 @@ import {
     Patch,
     Post,
     UseGuards,
-    ForbiddenException,
+    Query,
 } from "@nestjs/common";
 import { ConferenceService } from "./conference.service";
 import { CreateConferenceDto } from "../dto/create-conference.dto";
@@ -24,8 +24,12 @@ export class ConferenceController {
     constructor(private readonly service: ConferenceService) {}
 
     @Get()
-    findAll() {
-        return this.service.findAll();
+    findAll(
+        @Query("date") date?: string,
+        @Query("roomId", ParseIntPipe) roomId?: number,
+        @Query("speaker") speakerName?: string
+    ) {
+        return this.service.findAll({ date, roomId, speakerName });
     }
 
     @Get(":id")
