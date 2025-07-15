@@ -1,0 +1,74 @@
+// backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int              @id @default(autoincrement())
+  email        String           @unique
+  passwordHash String
+  role         Role             @default(VISITOR)
+  conferences  UserConference[] // conférences ajoutées à son planning
+  createdAt    DateTime         @default(now())
+  Conference   Conference[] // conférences sponsorisées
+}
+
+model Room {
+  id          Int          @id @default(autoincrement())
+  name        String
+  conferences Conference[]
+}
+
+model Speaker {
+  id           Int        @id @default(autoincrement())
+  fullName     String
+  photoUrl     String?
+  bio          String?
+  conferenceId Int        @unique
+  conference   Conference @relation(fields: [conferenceId], references: [id])
+}
+
+model Conference {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+
+  roomId Int
+  room   Room @relation(fields: [roomId], references: [id])
+
+  sponsorId Int?
+  sponsor   User? @relation(fields: [sponsorId], references: [id])
+
+  speaker Speaker?
+
+  attendees UserConference[]
+
+  createdAt DateTime @default(now())
+}
+
+model UserConference {
+  userId       Int
+  conferenceId Int
+
+  user       User       @relation(fields: [userId], references: [id])
+  conference Conference @relation(fields: [conferenceId], references: [id])
+
+  addedAt DateTime @default(now())
+
+  @@id([userId, conferenceId])
+}
+
+enum Role {
+  VISITOR
+  ADMIN
+  SPONSOR
+}
