@@ -28,22 +28,18 @@ git clone https://github.com/christophersemard/partiel-conferences.git
 cd partiel-conferences
 ```
 
-2. **Installer les dépendances**
+---
+
+2. **Configurer l'environnement**
+
+Le fichier .env a été envoyé sur le classroom, il est à placer dans le répertoire /backend
+
+3. **Installer les dépendances**
 
 Dans un terminal à la racine
 ```bash
 pnpm install
 ```
-
-
-3. **Configurer l'environnement**
-
-Créer un fichier `.env` à la racine du dossier `backend/` avec la variable suivante :
-
-```env
-DATABASE_URL=<À récupérer dans Google Classroom>
-```
-
 ---
 
 ## 🔄 Lancer les projets
