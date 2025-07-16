@@ -14,7 +14,8 @@ type FetchResponse<T> =
 
 export async function fetchServerAction<T>(
     input: string,
-    init: RequestInit = {}
+    init: RequestInit = {},
+    options?: { token?: string }
 ): Promise<FetchResponse<T>> {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     console.log("API_URL:", API_URL);
@@ -31,6 +32,13 @@ export async function fetchServerAction<T>(
         ...(init.headers as Record<string, string>),
         ...(cookieHeader ? { cookie: cookieHeader } : {}),
     };
+
+    const token =
+        options?.token ?? cookieStore.get("token")?.value ?? undefined;
+
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
 
     if (init.body && !headers["Content-Type"]) {
         headers["Content-Type"] = "application/json";

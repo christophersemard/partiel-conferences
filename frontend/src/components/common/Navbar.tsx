@@ -7,6 +7,7 @@ import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { logout } from "@/app/actions/logout";
 import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 type Props = {
     user: User | null;
@@ -26,7 +27,7 @@ export function Navbar({ user }: Props) {
 
                 <nav className="flex gap-4 text-sm">
                     <Link
-                        href="/conferences"
+                        href="/"
                         className={cn(
                             "hover:text-foreground",
                             pathname.startsWith("/conferences") && "font-medium text-foreground"
@@ -48,7 +49,7 @@ export function Navbar({ user }: Props) {
 
             <div className="text-sm text-muted-foreground">
                 {user ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 font-semibold">
                         {user.firstName} {user.lastName}
                         <LogoutButton />
                     </div>
@@ -73,7 +74,9 @@ export function LogoutButton() {
     }
 
     return (
-        <Button variant="outline" onClick={handleLogout}>
+
+        <Button variant="destructive" onClick={handleLogout}>
+            <LogOut className="w-4 h-4" />
             Déconnexion
         </Button>
     );

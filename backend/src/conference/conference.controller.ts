@@ -26,7 +26,7 @@ export class ConferenceController {
     @Get()
     findAll(
         @Query("date") date?: string,
-        @Query("roomId", ParseIntPipe) roomId?: number,
+        @Query("roomId", new ParseIntPipe({ optional: true })) roomId?: number,
         @Query("speaker") speakerName?: string
     ) {
         return this.service.findAll({ date, roomId, speakerName });

@@ -7,6 +7,7 @@ import { VisitorLayout } from "@/components/layouts/VisitorLayout";
 import { SponsorLayout } from "@/components/layouts/SponsorLayout";
 import { AdminLayout } from "@/components/layouts/AdminLayout";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Event App",
@@ -27,6 +28,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <UserProvider initialUser={user}>
           <LayoutComponent user={user!}>{children}</LayoutComponent>
         </UserProvider>
+        <Toaster />
       </body>
     </html>
   );
