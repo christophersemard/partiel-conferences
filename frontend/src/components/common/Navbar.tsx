@@ -54,9 +54,11 @@ export function Navbar({ user }: Props) {
                         <LogoutButton />
                     </div>
                 ) : (
-                    <Link href="/login" className="hover:underline">
-                        Se connecter
-                    </Link>
+                    <Button asChild variant="default">
+                        <Link href="/login" className="hover:underline">
+                            Se connecter
+                        </Link>
+                    </Button>
                 )}
             </div>
         </header>

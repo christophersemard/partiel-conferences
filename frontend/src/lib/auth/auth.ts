@@ -15,7 +15,9 @@ const ADMIN_ROUTES = [/^\/admin(\/.*)?$/];
 
 async function getUserFromToken(token: string) {
     try {
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+        const secret = new TextEncoder().encode(
+            process.env.JWT_SECRET || "un-secret-solide"
+        );
         const { payload } = await jwtVerify(token, secret);
         return payload;
     } catch {

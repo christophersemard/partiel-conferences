@@ -44,7 +44,8 @@ async function main() {
                 firstName: "Admin",
                 lastName: "User",
                 email: "admin@example.com",
-                passwordHash: "$2b$10$hash",
+                passwordHash:
+                    "$2b$10$SeNRqmJncN3H0WQVv/UlAOWj/nYwHyjLQyMT2D2CjGHLOF/NxvqY6",
                 role: "ADMIN",
             },
         }),
@@ -53,7 +54,8 @@ async function main() {
                 firstName: "Sponsor",
                 lastName: "One",
                 email: "sponsor1@example.com",
-                passwordHash: "$2b$10$hash",
+                passwordHash:
+                    "$2b$10$SeNRqmJncN3H0WQVv/UlAOWj/nYwHyjLQyMT2D2CjGHLOF/NxvqY6",
                 role: "SPONSOR",
             },
         }),
@@ -62,7 +64,8 @@ async function main() {
                 firstName: "Sponsor",
                 lastName: "Two",
                 email: "sponsor2@example.com",
-                passwordHash: "$2b$10$hash",
+                passwordHash:
+                    "$2b$10$SeNRqmJncN3H0WQVv/UlAOWj/nYwHyjLQyMT2D2CjGHLOF/NxvqY6",
                 role: "SPONSOR",
             },
         }),
@@ -71,7 +74,8 @@ async function main() {
                 firstName: "Sponsor",
                 lastName: "Three",
                 email: "sponsor3@example.com",
-                passwordHash: "$2b$10$hash",
+                passwordHash:
+                    "$2b$10$SeNRqmJncN3H0WQVv/UlAOWj/nYwHyjLQyMT2D2CjGHLOF/NxvqY6",
                 role: "SPONSOR",
             },
         }),
@@ -81,7 +85,8 @@ async function main() {
                     firstName: `Visiteur${i + 1}`,
                     lastName: "Test",
                     email: `visitor${i + 1}@example.com`,
-                    passwordHash: "$2b$10$hash",
+                    passwordHash:
+                        "$2b$10$SeNRqmJncN3H0WQVv/UlAOWj/nYwHyjLQyMT2D2CjGHLOF/NxvqY6",
                     role: "VISITOR",
                 },
             })

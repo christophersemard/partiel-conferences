@@ -1,0 +1,17 @@
+{
+  "name": "partiel-conferences",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "pnpm --filter=frontend dev",
+    "backend": "pnpm --filter=backend prisma:generate && pnpm --filter=backend start:dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.6.2",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3"
+  }
+}

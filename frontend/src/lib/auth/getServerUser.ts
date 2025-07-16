@@ -2,7 +2,9 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { User } from "@/types/user";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+const JWT_SECRET = new TextEncoder().encode(
+    process.env.JWT_SECRET || "un-secret-solide"
+);
 
 export async function getServerUser(): Promise<User | null> {
     const cookieStore = await cookies(); // pas besoin de await ici, cookies() est synchrone
