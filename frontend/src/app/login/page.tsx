@@ -10,7 +10,7 @@ export default async function LoginPage() {
     if (user) {
         if (user.role === "ADMIN") redirect("/admin");
         else if (user.role === "SPONSOR") redirect("/sponsor");
-        else redirect("/conferences");
+        else redirect("/");
     }
 
     return (

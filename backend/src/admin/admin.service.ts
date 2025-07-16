@@ -25,9 +25,13 @@ export class AdminService {
             return {
                 id: room.id,
                 name: room.name,
+                numberOfConferences: room.conferences.length,
                 capacity,
                 totalAttendees,
-                fillRate: capacity > 0 ? totalAttendees / capacity : 0,
+                fillRate:
+                    capacity > 0
+                        ? totalAttendees / capacity / room.conferences.length
+                        : 0,
             };
         });
     }
@@ -59,7 +63,18 @@ export class AdminService {
 
         if (!room) throw new NotFoundException("Salle introuvable");
 
-        return room.conferences;
+        return {
+            id: room.id,
+            name: room.name,
+            conferences: room.conferences.map((conf) => ({
+                id: conf.id,
+                title: conf.title,
+                startTime: conf.startTime.toISOString(),
+                endTime: conf.endTime.toISOString(),
+                speaker: conf.speaker,
+                sponsor: conf.sponsor,
+            })),
+        };
     }
 
     async getSponsors() {

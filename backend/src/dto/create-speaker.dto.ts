@@ -1,14 +1,17 @@
 import { IsOptional, IsString } from "class-validator";
 
 export class CreateSpeakerDto {
-  @IsString()
-  fullName: string;
+    @IsString()
+    firstName: string;
 
-  @IsOptional()
-  @IsString()
-  photoUrl?: string;
+    @IsString()
+    lastName: string;
 
-  @IsOptional()
-  @IsString()
-  bio?: string;
+    @IsOptional()
+    @IsString()
+    photoUrl?: string;
+
+    @IsOptional()
+    @IsString()
+    bio?: string;
 }

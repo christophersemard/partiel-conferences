@@ -93,6 +93,11 @@ export class ConferenceService {
             },
         });
 
+        console.log(
+            `Checking conflict for room ${roomId} on ${date.toISOString()} from ${startTime.toISOString()} to ${endTime.toISOString()}:`,
+            conflict ? "Conflict found" : "No conflict"
+        );
+
         if (conflict) {
             throw new ConflictException("Conflit horaire dans cette salle.");
         }
@@ -192,6 +197,7 @@ export class ConferenceService {
                 startTime,
                 endTime,
                 roomId: dto.roomId,
+                sponsorId: dto.sponsorId ? dto.sponsorId : null,
             },
         });
 

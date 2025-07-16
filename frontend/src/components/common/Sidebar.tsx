@@ -15,19 +15,9 @@ type Props = {
 
 const links = [
     {
-        href: "/admin/conferences",
-        label: "Conférences",
-        icon: Calendar,
-    },
-    {
-        href: "/admin/rooms",
+        href: "/admin",
         label: "Salles",
         icon: Home,
-    },
-    {
-        href: "/admin/sponsors",
-        label: "Sponsors",
-        icon: Users,
     },
 ];
 

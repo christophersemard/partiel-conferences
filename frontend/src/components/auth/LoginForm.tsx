@@ -44,7 +44,7 @@ export function LoginForm() {
                 redirect("/admin");
             }
             else if (data.user.role === "VISITOR") {
-                redirect("/conferences");
+                redirect("/");
             }
             else if (data.user.role === "SPONSOR") {
                 redirect("/sponsor");

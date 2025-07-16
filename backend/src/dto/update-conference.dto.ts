@@ -37,4 +37,8 @@ export class UpdateConferenceDto {
     @ValidateNested()
     @Type(() => CreateSpeakerDto)
     speaker?: CreateSpeakerDto;
+
+    @IsOptional()
+    @IsInt()
+    sponsorId?: number;
 }
