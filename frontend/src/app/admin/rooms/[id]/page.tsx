@@ -5,6 +5,8 @@ import { fr } from "date-fns/locale";
 import { fetchServerAction } from "@/app/actions/fetch-proxy";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
+import { DeleteConferenceButton } from "@/components/admin/DeleteConferenceButton";
+
 
 type Conference = {
     id: number;
@@ -95,12 +97,8 @@ export default async function AdminRoomDetailPage({ params }: Props) {
                                                         Modifier
                                                     </Button>
                                                 </Link>
-                                                <form action={`/api/admin/conferences/${conf.id}`} method="POST">
-                                                    <input type="hidden" name="_method" value="DELETE" />
-                                                    <Button variant="destructive" size="sm" type="submit">
-                                                        Supprimer
-                                                    </Button>
-                                                </form>
+                                                <DeleteConferenceButton conferenceId={conf.id} />
+
                                             </div>
                                         </td>
                                     </tr>

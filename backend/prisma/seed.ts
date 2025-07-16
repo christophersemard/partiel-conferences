@@ -1,5 +1,3 @@
-// backend/prisma/seed.ts
-
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -31,169 +29,176 @@ async function main() {
             { name: "Salle Gamma", capacity: 10 },
         ],
     });
-
     const rooms = await prisma.room.findMany();
 
     // USERS
-    const [admin, sponsor, visitor1, visitor2] = await Promise.all([
+    const [
+        admin,
+        sponsor1,
+        sponsor2,
+        sponsor3,
+        ...visitors
+    ] = await Promise.all([
         prisma.user.create({
             data: {
                 firstName: "Admin",
                 lastName: "User",
                 email: "admin@example.com",
-                passwordHash:
-                    "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
+                passwordHash: "$2b$10$hash",
                 role: "ADMIN",
             },
         }),
         prisma.user.create({
             data: {
                 firstName: "Sponsor",
-                lastName: "User",
-                email: "sponsor@example.com",
-                passwordHash:
-                    "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
+                lastName: "One",
+                email: "sponsor1@example.com",
+                passwordHash: "$2b$10$hash",
                 role: "SPONSOR",
             },
         }),
         prisma.user.create({
             data: {
-                firstName: "John",
-                lastName: "Doe",
-                email: "john@doe.com",
-                passwordHash:
-                    "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
-                role: "VISITOR",
+                firstName: "Sponsor",
+                lastName: "Two",
+                email: "sponsor2@example.com",
+                passwordHash: "$2b$10$hash",
+                role: "SPONSOR",
             },
         }),
         prisma.user.create({
             data: {
-                firstName: "Jane",
-                lastName: "Doe",
-                email: "jane@doe.com",
-                passwordHash:
-                    "$2b$10$Gbl5JlDXX7HfAmvheUX0VutijljZpyLJ49dotOJ44xPqN/0TlN81u",
-                role: "VISITOR",
+                firstName: "Sponsor",
+                lastName: "Three",
+                email: "sponsor3@example.com",
+                passwordHash: "$2b$10$hash",
+                role: "SPONSOR",
+            },
+        }),
+        ...Array.from({ length: 8 }, (_, i) =>
+            prisma.user.create({
+                data: {
+                    firstName: `Visiteur${i + 1}`,
+                    lastName: "Test",
+                    email: `visitor${i + 1}@example.com`,
+                    passwordHash: "$2b$10$hash",
+                    role: "VISITOR",
+                },
+            })
+        ),
+    ]);
+
+    // CONFERENCES
+    const conferences = await Promise.all([
+        prisma.conference.create({
+            data: {
+                title: "Innover dans le numérique",
+                description: "Digitalisation post-Covid",
+                date: new Date("2025-09-25"),
+                startTime: new Date("2025-09-25T10:00:00"),
+                endTime: new Date("2025-09-25T11:00:00"),
+                roomId: rooms[0].id,
+                sponsorId: sponsor1.id,
+            },
+        }),
+        prisma.conference.create({
+            data: {
+                title: "Sécurité des données",
+                description: "Cybersécurité & infra",
+                date: new Date("2025-09-25"),
+                startTime: new Date("2025-09-25T14:00:00"),
+                endTime: new Date("2025-09-25T17:00:00"),
+                roomId: rooms[1].id,
+            },
+        }),
+        prisma.conference.create({
+            data: {
+                title: "Leadership moderne",
+                description: "Management hybride",
+                date: new Date("2025-09-25"),
+                startTime: new Date("2025-09-25T16:00:00"),
+                endTime: new Date("2025-09-25T17:00:00"),
+                roomId: rooms[2].id,
+                sponsorId: sponsor2.id,
+            },
+        }),
+        prisma.conference.create({
+            data: {
+                title: "IA générative",
+                description: "Applications concrètes",
+                date: new Date("2025-09-26"),
+                startTime: new Date("2025-09-26T11:00:00"),
+                endTime: new Date("2025-09-26T12:00:00"),
+                roomId: rooms[0].id,
+            },
+        }),
+        prisma.conference.create({
+            data: {
+                title: "Recrutement et soft skills",
+                description: "RH & innovation",
+                date: new Date("2025-09-26"),
+                startTime: new Date("2025-09-26T15:00:00"),
+                endTime: new Date("2025-09-26T16:00:00"),
+                roomId: rooms[1].id,
+                sponsorId: sponsor3.id,
+            },
+        }),
+        prisma.conference.create({
+            data: {
+                title: "Open source & entreprises",
+                description: "Modèles collaboratifs",
+                date: new Date("2025-09-26"),
+                startTime: new Date("2025-09-26T16:00:00"),
+                endTime: new Date("2025-09-26T17:00:00"),
+                roomId: rooms[2].id,
             },
         }),
     ]);
 
-    // CONFERENCES avec SPEAKERS
-    const conf1 = await prisma.conference.create({
-        data: {
-            title: "Innover dans le numérique",
-            description: "Retour d’expérience sur la digitalisation post-Covid",
-            date: new Date("2025-09-25"),
-            startTime: new Date("2025-09-25T10:00:00"),
-            endTime: new Date("2025-09-25T11:00:00"),
-            roomId: rooms[0].id,
-            sponsorId: sponsor.id,
-        },
-    });
+    // SPEAKERS
+    await Promise.all(
+        conferences.map((conf, i) =>
+            prisma.speaker.create({
+                data: {
+                    firstName: [
+                        "Alice",
+                        "Bob",
+                        "Claire",
+                        "David",
+                        "Eva",
+                        "Frank",
+                    ][i],
+                    lastName: [
+                        "Durand",
+                        "Martin",
+                        "Moreau",
+                        "Lefevre",
+                        "Lopez",
+                        "Petit",
+                    ][i],
+                    bio: `Bio de l'intervenant ${i + 1}`,
+                    photoUrl: "https://via.placeholder.com/150",
+                    conferenceId: conf.id,
+                },
+            })
+        )
+    );
 
-    const conf2 = await prisma.conference.create({
-        data: {
-            title: "Sécurité des données en entreprise",
-            description: "Bonnes pratiques pour protéger ses infrastructures",
-            date: new Date("2025-09-25"),
-            startTime: new Date("2025-09-25T14:00:00"),
-            endTime: new Date("2025-09-25T17:00:00"),
-            roomId: rooms[1].id,
-        },
-    });
+    // PLANNING : chaque conférence a entre 2 et 8 visiteurs
+    for (const conf of conferences) {
+        const shuffled = visitors.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, Math.floor(Math.random() * 7) + 2); // 2 à 8
+        await prisma.userConference.createMany({
+            data: selected.map((v) => ({
+                userId: v.id,
+                conferenceId: conf.id,
+            })),
+        });
+    }
 
-    const conf3 = await prisma.conference.create({
-        data: {
-            title: "Leadership et gestion d'équipe",
-            description: "Les clés d’un management efficace à l’ère hybride",
-            date: new Date("2025-09-25"),
-            startTime: new Date("2025-09-25T16:00:00"),
-            endTime: new Date("2025-09-25T17:00:00"),
-            roomId: rooms[2].id,
-        },
-    });
-
-    const conf4 = await prisma.conference.create({
-        data: {
-            title: "IA générative : applications concrètes",
-            description: "Utiliser l’IA dans les PME dès aujourd’hui",
-            date: new Date("2025-09-26"),
-            startTime: new Date("2025-09-26T11:00:00"),
-            endTime: new Date("2025-09-26T12:00:00"),
-            roomId: rooms[0].id,
-        },
-    });
-
-    const conf5 = await prisma.conference.create({
-        data: {
-            title: "Recruter autrement : le rôle des soft skills",
-            description: "Focus RH : au-delà du CV",
-            date: new Date("2025-09-26"),
-            startTime: new Date("2025-09-26T15:00:00"),
-            endTime: new Date("2025-09-26T16:00:00"),
-            roomId: rooms[1].id,
-        },
-    });
-
-    await Promise.all([
-        prisma.speaker.create({
-            data: {
-                firstName: "Alice",
-                lastName: "Dupont",
-                photoUrl: "https://via.placeholder.com/150",
-                bio:
-                    "Experte en transformation digitale et conférencière TEDx.",
-                conferenceId: conf1.id,
-            },
-        }),
-        prisma.speaker.create({
-            data: {
-                firstName: "Bob",
-                lastName: "Martin",
-                photoUrl: "https://via.placeholder.com/150",
-                bio: "Consultant en cybersécurité depuis 10 ans.",
-                conferenceId: conf2.id,
-            },
-        }),
-        prisma.speaker.create({
-            data: {
-                firstName: "Claire",
-                lastName: "Durant",
-                photoUrl: "https://via.placeholder.com/150",
-                bio: "Coach en leadership et ancienne DRH chez Capgemini.",
-                conferenceId: conf3.id,
-            },
-        }),
-        prisma.speaker.create({
-            data: {
-                firstName: "David",
-                lastName: "Lefebvre",
-                photoUrl: "https://via.placeholder.com/150",
-                bio: "Experte en IA dans les PME.",
-                conferenceId: conf4.id,
-            },
-        }),
-        prisma.speaker.create({
-            data: {
-                firstName: "Eva",
-                lastName: "Moreau",
-                photoUrl: "https://via.placeholder.com/150",
-                bio: "Experte RH et recrutement innovant.",
-                conferenceId: conf5.id,
-            },
-        }),
-    ]);
-
-    // PLANNING
-    await prisma.userConference.createMany({
-        data: [
-            { userId: visitor1.id, conferenceId: conf1.id },
-            { userId: visitor1.id, conferenceId: conf3.id },
-            { userId: visitor2.id, conferenceId: conf2.id },
-        ],
-    });
-
-    console.log("✅ Seed terminé avec confs & speakers uniques.");
+    console.log(
+        "✅ Seed enrichi terminé avec visiteurs, sponsors, speakers et conférences réalistes."
+    );
 }
 
 main()

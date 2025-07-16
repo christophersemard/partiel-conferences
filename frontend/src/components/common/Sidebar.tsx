@@ -13,12 +13,20 @@ type Props = {
     user: User;
 };
 
-const links = [
+const adminLinks = [
     {
         href: "/admin",
         label: "Salles",
         icon: Home,
     },
+];
+
+const sponsorLinks = [
+    {
+        href: "/sponsor",
+        label: "Mes conférences",
+        icon: Calendar,
+    }
 ];
 
 export function Sidebar({ user }: Props) {
@@ -34,7 +42,21 @@ export function Sidebar({ user }: Props) {
                 </div>
 
                 <nav className="space-y-1">
-                    {links.map(({ href, label, icon: Icon }) => (
+                    {user.role == "ADMIN" && adminLinks.map(({ href, label, icon: Icon }) => (
+                        <Link
+                            key={href}
+                            href={href}
+                            className={cn(
+                                "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition",
+                                pathname.startsWith(href) && "bg-accent text-accent-foreground"
+                            )}
+                        >
+                            <Icon className="w-4 h-4" />
+                            {label}
+                        </Link>
+                    ))}
+
+                    {user.role == "SPONSOR" && sponsorLinks.map(({ href, label, icon: Icon }) => (
                         <Link
                             key={href}
                             href={href}

@@ -122,12 +122,21 @@ export class ConferenceService {
             },
         });
 
-        await this.prisma.speaker.create({
-            data: {
-                ...dto.speaker,
-                conferenceId: conf.id,
-            },
-        });
+        try {
+            await this.prisma.speaker.create({
+                data: {
+                    ...dto.speaker,
+                    conferenceId: conf.id,
+                },
+            });
+        } catch (error) {
+            // Suppring the conference if speaker creation fails
+            await this.prisma.conference.delete({ where: { id: conf.id } });
+            console.error("Error creating speaker:", error);
+            throw new ConflictException(
+                "Erreur lors de la création du conférencier"
+            );
+        }
 
         return this.findOne(conf.id);
     }

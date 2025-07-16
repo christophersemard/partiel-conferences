@@ -33,7 +33,7 @@ export default async function AdminRoomsPage() {
                 {data.map((room) => (
                     <div
                         key={room.id}
-                        className="border rounded-md p-4 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                        className="border rounded-md p-4 bg-white flex flex-col  gap-4"
                     >
                         <div className="flex-1">
                             <h2 className="font-semibold text-lg">{room.name}</h2>
@@ -50,7 +50,7 @@ export default async function AdminRoomsPage() {
 
                         <div>
                             <Link href={`/admin/rooms/${room.id}`}>
-                                <Button variant="outline">Gérer</Button>
+                                <Button variant="default">Gérer les conférences de cette salle</Button>
                             </Link>
                         </div>
                     </div>
